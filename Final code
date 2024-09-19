@@ -1,0 +1,77 @@
+## installing necessary packages for the task
+!pip install nltk
+!pip install scikit-learn
+!pip install pandas
+!pip install numpy
+## importing the functions necessary for the task
+import nltk
+import numpy as np
+import pandas as pd
+nltk.download('stopwords')
+nltk.download("punkt")
+nltk.download('wordnet')
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize, sent_tokenize
+from sklearn.feature_extraction.text import CountVectorizer
+from nltk.tokenize import sent_tokenize
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import TruncatedSVD
+
+## getting data for the code
+file = '##File path containing sample should be entered here'
+rows= 1000
+df = pd.read_csv(file_pat, usecols=['text'], nrows= rows)
+print(df.head())
+series = df['text']
+whole_text = ','.join(series.astype(str))
+
+#### defining the stop words and then cleaning the texts and tokenizing
+sentence = whole_text.split()
+stop_word = set(stopwords.words('english'))
+actual_words = [ word for word in sentence if word.lower() not in stop_word and word.isalpha() ]
+lemma = WordNetLemmatizer()
+stem=PorterStemmer()
+words= [stem.stem(word) for word in actual_words]
+words = [ lemma.lemmatize(word) for word in actual_words] 
+
+## Creating bag of Words and vectorizing
+vectors = CountVectorizer()
+F = vectors.fit_transform(words)
+main_features = vectors.get_feature_names_out()
+
+## Creating matrix to count frequency of each feature then listing top 100 features using term frequency
+tf = F.toarray().sum(axis =0)
+feature_frequency = dict(zip(main_features, tf))
+sorted_frequency = sorted(feature_frequency.items(), key = lambda x :x[1], reverse = True)
+top_no = 100
+print(" Top features are according to Term Frequency:")
+for feature, frequency in sorted_frequency[ : top_no]:
+    print(f"{feature} : {frequency}")
+
+### LSA using tfidf and Singular value decomposition
+document = ' '.join(words)
+Tfid = TfidfVectorizer()
+S = Tfid.fit_transform([document])
+no_of_components = min(100, S.shape[1])
+svd = TruncatedSVD(n_components=no_of_components)
+S_SVD = svd.fit_transform(S)
+print("Original TFIDF shape:", S.shape)
+print("Reduced TFIDF shape:", S_SVD.shape)
+featureNames = Tfid.get_feature_names_out()
+## creating array to store score of each feature
+score= np.zeros(len(featureNames))
+
+##going through each component from SVD
+for i in range(min(no_of_components,svd.components_.shape[0])):
+  term_indice = svd.components_[i].argsort()[::-1}
+  for idx in term_indices:
+      scores[idx] += abs(svd.components_[i][idx])
+## finding top scores
+top_scores = np.argsort(scores)[::-1]
+## printing top 100 features
+n = 100
+print(f" Top {n} Most important features:")
+for idx in top_scores[:n]:
+  print(f"{featureNames[idx]}: {score[idx]}")
