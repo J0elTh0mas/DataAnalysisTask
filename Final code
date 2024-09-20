@@ -50,28 +50,31 @@ print(" Top features are according to Term Frequency:")
 for feature, frequency in sorted_frequency[ : top_no]:
     print(f"{feature} : {frequency}")
 
-### LSA using tfidf and Singular value decomposition
-document = ' '.join(words)
+# Join words into a single document string
+document = ' '.join(words)  # Create a single document from the list of words
 Tfid = TfidfVectorizer()
 S = Tfid.fit_transform([document])
+# Define number of features for SVD
 no_of_components = min(100, S.shape[1])
 svd = TruncatedSVD(n_components=no_of_components)
 S_SVD = svd.fit_transform(S)
 print("Original TFIDF shape:", S.shape)
 print("Reduced TFIDF shape:", S_SVD.shape)
 featureNames = Tfid.get_feature_names_out()
-## creating array to store score of each feature
-score= np.zeros(len(featureNames))
-
-##going through each component from SVD
-for i in range(min(no_of_components,svd.components_.shape[0])):
-  term_indice = svd.components_[i].argsort()[::-1}
-  for idx in term_indices:
-      scores[idx] += abs(svd.components_[i][a])
-## finding top scores
-top_scores = np.argsort(scores)[::-1]
-## printing top 100 features
-n = 100
-print(f" Top {n} Most important features:")
-for idx in top_scores[:n]:
-  print(f"{featureNames[a]}: {score[a]}")
+print(featureNames)
+# Get feature names from TF-IDF
+featureNames = Tfid.get_feature_names_out()
+# Initialize an array to hold the scores for each feature
+scores = np.zeros(len(featureNames))
+# Loop through each component obtained from SVD
+for i in range(min(no_of_components, svd.components_.shape[0])):
+    term_indices = svd.components_[i].argsort()[::-1]  
+    for idx in term_indices:
+        scores[idx] += abs(svd.components_[i][idx])
+# Get the indices of the top features based on the accumulated scores
+top_indices = np.argsort(scores)[::-1]
+# Print the top 100 features
+top_n = 100  
+print(f"Top {top_n} Overall Relevant Features:")
+for idx in top_indices[:top_n]:
+    print(f"{featureNames[idx]}: {scores[idx]}")
