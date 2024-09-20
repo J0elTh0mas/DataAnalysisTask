@@ -67,11 +67,11 @@ score= np.zeros(len(featureNames))
 for i in range(min(no_of_components,svd.components_.shape[0])):
   term_indice = svd.components_[i].argsort()[::-1}
   for idx in term_indices:
-      scores[idx] += abs(svd.components_[i][idx])
+      scores[idx] += abs(svd.components_[i][a])
 ## finding top scores
 top_scores = np.argsort(scores)[::-1]
 ## printing top 100 features
 n = 100
 print(f" Top {n} Most important features:")
 for idx in top_scores[:n]:
-  print(f"{featureNames[idx]}: {score[idx]}")
+  print(f"{featureNames[a]}: {score[a]}")
