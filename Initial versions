@@ -1,0 +1,132 @@
+## installing necessary packages for the task
+!pip install nltk
+!pip install scikit-learn
+!pip install pandas
+!pip install numpy
+## importing the functions necessary for the task
+import nltk
+import numpy as np
+import pandas as pd
+import string
+nltk.download('stopwords')
+nltk.download("punkt")
+nltk.download('wordnet')
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize, sent_tokenize
+from sklearn.feature_extraction.text import CountVectorizer
+from nltk.tokenize import sent_tokenize
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import TruncatedSVD
+
+
+##  had many issues using the file_path method so ten i proceed to manually copy and paste the complaints into the poython code as sentences
+sen= " insert complaints here"
+print(sen)
+sep_sen = sen.split()
+print(sep_sen)
+stop_word = set(stopwords.words('english'))
+actual_words = [ word for word in sep_sen if word.lower() not in stop_word and word.isalnum() ]
+lemma = WordNetLemmatizer()
+stem=PorterStemmer()
+print(actual_words)
+words= [stem.stem(word) for word in actual_words]
+words = [ lemma.lemmatize(word) for word in actual_words] 
+print(words)
+
+## importing excel file (v.1)
+file_path = 'https://d.docs.live.net/85959ad52ea1cbf8/Documents/SampleData/ComcastComplaints%20(1).csv'
+df = pd.read_csv(file_path,on_bad_lines= 'skip')
+column_data = df.iloc[:3]
+print(column_data)
+
+## v.2
+file_path = 'https://d.docs.live.net/85959ad52ea1cbf8/Documents/SampleData/ComcastComplaints%20(1).csv'
+df = pd.read_csv(file_path,on_bad_lines= 'skip')
+column = "text"
+if column in df.columns:
+    column_data = df[column]
+else:
+    print(f"Column '{column}' does not exist in the DataFrame.")
+
+
+## v.3
+file_pat = 'C:\\Users\\user\\Desktop\\Data Analysis\\Sample Data\\comcast_consumeraffairs_complaints.csv'
+df = pd.read_csv(file_pat, usecols=['text'])
+print(df.head())
+series = df['text']
+print(series)
+whole_text = ','.join(series.astype(str))
+
+
+#testing inital tokeinzation
+from nltk.corpus import stopwords
+sen = sen.lower()
+words= word_tokenize(sen)
+print(words)
+stopwords = set(stopwords.words('english'))
+words= [ word for word in words if word not in stop_words]
+words = [ word for word in words if word.isalpha()]
+print(preprocessed_words)
+
+# 2nd test for tokentization
+sample_text =  [ "Data science is an inter-disciplinary field that uses scientific methods, processes, algorithms and systems to extract knowledge and insights from structured and unstructured data.",
+    "Machine learning is a subset of artificial intelligence that focuses on building systems that learn from data and improve their performance over time.",
+    "Natural language processing (NLP) is a field of artificial intelligence that helps computers understand, interpret, and generate human language.",
+    "Deep learning models are a type of machine learning algorithm inspired by the structure and function of the human brain.",
+    "Data visualization involves the creation of visual representations of data to help understand complex information and trends.",
+    "Big data refers to large volumes of data that can be analyzed to reveal patterns, trends, and associations, especially relating to human behavior and interactions.",
+    "Predictive analytics uses statistical techniques and machine learning algorithms to make predictions about future events based on historical data.",
+    "In data science, exploratory data analysis (EDA) is an approach for summarizing the main characteristics of a dataset, often with visual methods."]
+print(sample_text)
+''.join(sample_text)
+print(sample_text)
+stop_word = set(stopwords.words('english'))
+actual_word = [ word for word in sample_text if word.lower() not in stop_word and word.isalnum() ]
+lemma = WordNetLemmatizer()
+stem=PorterStemmer()
+print(actual_word)
+words= [stem.stem(word) for word in actual_word]
+words = [ lemma.lemmatize(word) for word in actual_word]
+print(actual_word)
+
+## 3 rd test
+sen=   """the cat sat on the mat,
+        the dog sat on the log,
+     the cat and the dog played."""
+print(sen)
+sep_sen = sen.split()
+print(sep_sen)
+stop_word = set(stopwords.words('english'))
+actual_words = [ word for word in sep_sen if word.lower() not in stop_word and word.isalnum() ]
+lemma = WordNetLemmatizer()
+stem=PorterStemmer()
+print(actual_words)
+words= [stem.stem(word) for word in actual_words]
+words = [ lemma.lemmatize(word) for word in actual_words] 
+print(words)
+
+
+
+##testing BoW method.
+from sklearn.feature_extraction.text import CountVectorizer
+vectors = CountVectorizer()
+F = vectors.fit_transform(actual_words)
+main_features = vectors.get_feature_names_out()
+matrix = F.toarray()
+print(matrix)
+print("\nFeature Names (Vocabulary):")
+print(main_features)
+
+## testing LSA method.
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import TruncatedSVD
+no_of_components =2
+svd= TruncatedSVD(n_components=no_of_components)
+F_SVD = svd.fit_transform(F)
+print("original TFIDF shape",F.shape)
+print("reduced tfidf shape",F_SVD.shape)
+print("tfidf (reduced)", F_SVD)
+
