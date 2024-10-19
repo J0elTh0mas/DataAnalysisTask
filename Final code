@@ -3,10 +3,12 @@
 !pip install scikit-learn
 !pip install pandas
 !pip install numpy
+!pip install gensim nltk
 ## importing the functions necessary for the task
 import nltk
 import numpy as np
 import pandas as pd
+
 nltk.download('stopwords')
 nltk.download("punkt")
 nltk.download('wordnet')
@@ -18,6 +20,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from nltk.tokenize import sent_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import TruncatedSVD
+from gensim import corpora
+from gensim.models import LdaModel
 
 ## getting data for the code
 file = '##File path containing sample should be entered here'
@@ -78,3 +82,13 @@ top_n = 100
 print(f"Top {top_n} Overall Relevant Features:")
 for idx in top_indices[:top_n]:
     print(f"{featureNames[idx]}: {scores[idx]}")
+# implementing gensim as topic modelling apporach
+# preparing data for gensim apporach
+dictonary_of_words = corpora.Dictionary([words])
+corpus = [dictionary_of_words.doc2bow(doc) for doc in [words]]
+topics_lda = 5
+lda = LdaModel(corpus, topics_lda =topics_lda, id2word=dictionanry_of_words, passes=15)
+## To display the topics found 
+print('\nTopics found using LDA:')
+for idx, topic in lda.print_topics(-1):
+    print(f"topic {idx + 1}: {topic}")
