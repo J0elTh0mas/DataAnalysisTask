@@ -85,9 +85,9 @@ for idx in top_indices[:top_n]:
 # implementing gensim as topic modelling apporach
 # preparing data for gensim apporach
 dictonary_of_words = corpora.Dictionary([words])
-corpus = [dictionary_of_words.doc2bow(doc) for doc in [words]]
+corpus = [dictonary_of_words.doc2bow(doc) for doc in [words]]
 topics_lda = 5
-lda = LdaModel(corpus, topics_lda =topics_lda, id2word=dictionanry_of_words, passes=15)
+lda = LdaModel(corpus, topics_lda =topics_lda, id2word=dictonary_of_words, passes=15)
 ## To display the topics found 
 print('\nTopics found using LDA:')
 for idx, topic in lda.print_topics(-1):
