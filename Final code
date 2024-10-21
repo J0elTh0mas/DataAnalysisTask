@@ -34,7 +34,15 @@ whole_text = ','.join(series.astype(str))
 #### defining the stop words and then cleaning the texts and tokenizing
 sentence = whole_text.split()
 stop_word = set(stopwords.words('english'))
-actual_words = [ word for word in sentence if word.lower() not in stop_word and word.isalpha() ]
+### Here you can add words that need to be removed after or before cleaning
+words_to_remove = {'get', 'would', 'call', 'customer'} 
+
+actual_words = [
+    word for word in whole_text.split() 
+    if word.lower() not in stop_word and 
+       word.lower() not in words_to_remove and 
+       word.isalpha()
+]
 lemma = WordNetLemmatizer()
 stem=PorterStemmer()
 words= [stem.stem(word) for word in actual_words]
@@ -86,6 +94,7 @@ for idx in top_indices[:top_n]:
 # preparing data for gensim apporach
 dictonary_of_words = corpora.Dictionary([words])
 corpus = [dictonary_of_words.doc2bow(doc) for doc in [words]]
+### Defining no. of topics to be found and also how many time the model should pass through the document
 topics_lda = 5
 lda = LdaModel(corpus, topics_lda =topics_lda, id2word=dictonary_of_words, passes=15)
 ## To display the topics found 
