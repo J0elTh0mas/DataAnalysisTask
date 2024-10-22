@@ -1,9 +1,7 @@
 # DataAnalysisTask
-Code for the Data anaylsis course
+Code for the Data anaylsis course to be done on comcast customer complaints
 
-The required packages can be seen as :
-Pandas,
-Numpy,
-nltk,
-scikit_learn and 
-gensim nltk
+### The required packages can be installed with
+pip install -r requirements.txt
+
+### then the code can be excuted using the final code in a virtual enviroment
