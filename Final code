@@ -90,6 +90,7 @@ top_n = 100
 print(f"Top {top_n} Overall Relevant Features:")
 for idx in top_indices[:top_n]:
     print(f"{featureNames[idx]}: {scores[idx]}")
+
 # using gensim as for LDA as topic modelling apporach
 # preparing data for LDA apporach
 dictonary_of_words = corpora.Dictionary([words])
